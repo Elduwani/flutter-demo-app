@@ -11,18 +11,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  final _username = 'Elduwani';
+  static const _unit = 8.0;
 
   @override
   Widget build(BuildContext context) {
@@ -33,46 +23,96 @@ class _LoginPageState extends State<LoginPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the LoginPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+      backgroundColor: Colors.grey[300],
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Sign In',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: _unit * 3),
+              ),
+              const SizedBox(height: _unit),
+              Text('Welcome back, $_username'),
+
+              //INPUT 1
+              const SizedBox(height: _unit * 6),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: _unit * 3),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: _unit * 2),
+                    child: TextField(
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: "Enter Email"),
+                    ),
+                  ),
+                ),
+              ),
+
+              //INPUT 2
+              const SizedBox(height: _unit),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: _unit * 3),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(_unit)),
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: _unit * 2),
+                    child: TextField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: "Enter Password"),
+                    ),
+                  ),
+                ),
+              ),
+
+              //BUTTON
+              const SizedBox(height: _unit),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: _unit * 3),
+                child: Container(
+                  padding: const EdgeInsets.all(_unit * 2),
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple,
+                    borderRadius: BorderRadius.circular(_unit),
+                  ),
+                  child: const Center(
+                      child: Text(
+                    'Sign In',
+                    style: TextStyle(color: Colors.white),
+                  )),
+                ),
+              ),
+
+              //Text
+              const SizedBox(height: _unit * 1.5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Not a member? "),
+                  Text(
+                    "Register now",
+                    style: TextStyle(
+                      color: Colors.blue[600],
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
