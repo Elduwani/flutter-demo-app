@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+// import 'dart:developer' as devtools show log;
 
 import '../../components/input.dart';
 
@@ -29,10 +30,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text,
-    );
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {}
+      if (e.code == 'wrong-password') {}
+    }
   }
 
   @override

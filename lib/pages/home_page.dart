@@ -16,7 +16,9 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Home Page"),
+            Text(
+              "Hello ${FirebaseAuth.instance.currentUser?.email}",
+            ),
             const SizedBox(height: _unit * 2),
             GestureDetector(
               onTap: signOut,
