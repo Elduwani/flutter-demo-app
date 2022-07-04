@@ -36,3 +36,41 @@ class Input extends StatelessWidget {
     );
   }
 }
+
+class Button extends StatelessWidget {
+  final function;
+  final String text;
+  final Color? color;
+  final Color? textColor;
+  static const _unit = 8.0;
+  const Button({
+    Key? key,
+    required this.function,
+    required this.text,
+    this.color = Colors.deepPurple,
+    this.textColor = Colors.white,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: function,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: _unit * 3),
+        child: Container(
+          padding: const EdgeInsets.all(_unit * 2),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(_unit),
+          ),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(color: textColor),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

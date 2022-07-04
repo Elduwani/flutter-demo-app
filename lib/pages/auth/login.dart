@@ -81,24 +81,7 @@ class _LoginPageState extends State<LoginPage> {
 
               //BUTTON
               const SizedBox(height: _unit * 2),
-              GestureDetector(
-                onTap: signIn,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: _unit * 3),
-                  child: Container(
-                    padding: const EdgeInsets.all(_unit * 2),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple,
-                      borderRadius: BorderRadius.circular(_unit),
-                    ),
-                    child: const Center(
-                        child: Text(
-                      'Sign In',
-                      style: TextStyle(color: Colors.white),
-                    )),
-                  ),
-                ),
-              ),
+              Button(function: signIn, text: "Sign In"),
 
               //Text
               const SizedBox(height: _unit * 2),
