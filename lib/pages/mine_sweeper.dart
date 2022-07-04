@@ -13,15 +13,46 @@ class _MineSweeperState extends State<MineSweeper> {
   static const rowCount = 9;
   static const gridCount = rowCount * rowCount;
 
+  int bombCount = 4;
   List squareStatus = [];
   List<int> bombLocations = [4, 20, 40, 55];
+  bool bombed = false;
 
   @override
   void initState() {
     super.initState();
+
     for (int i = 0; i < gridCount; i++) {
       squareStatus.add([0, false]);
     }
+
+    void updater(int index) {
+      squareStatus[index][0]++;
+    }
+
+    Utils().scanBombs(bombLocations, rowCount, gridCount, updater);
+  }
+
+  void revealBox(int index) {
+    void updater(int i) {
+      setState(() {
+        squareStatus[i][1] = true;
+      });
+    }
+
+    Utils().exposeNeighbors(
+      index,
+      rowCount,
+      gridCount,
+      updater,
+      squareStatus,
+    );
+  }
+
+  void detonate() {
+    setState(() {
+      bombed = true;
+    });
   }
 
   @override
@@ -38,7 +69,7 @@ class _MineSweeperState extends State<MineSweeper> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("6", style: TextStyle(fontSize: 40)),
+                    Text(bombCount.toString(), style: TextStyle(fontSize: 40)),
                     const Text("BOMBS", style: TextStyle(letterSpacing: _unit)),
                   ],
                 ),
@@ -52,9 +83,9 @@ class _MineSweeperState extends State<MineSweeper> {
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     Text("0", style: TextStyle(fontSize: 40)),
-                    const Text("TIME", style: TextStyle(letterSpacing: _unit)),
+                    Text("TIME", style: TextStyle(letterSpacing: _unit)),
                   ],
                 ),
               ],
@@ -71,9 +102,16 @@ class _MineSweeperState extends State<MineSweeper> {
               ),
               itemBuilder: (context, index) {
                 if (bombLocations.contains(index)) {
-                  return Bomb(text: index.toString());
+                  return Bomb(
+                    revealed: squareStatus[index][1],
+                    function: detonate,
+                  );
                 }
-                return Box(text: index.toString());
+                return Box(
+                  text: squareStatus[index][0].toString(),
+                  revealed: squareStatus[index][1],
+                  function: () => revealBox(index),
+                );
               },
             ),
           )
