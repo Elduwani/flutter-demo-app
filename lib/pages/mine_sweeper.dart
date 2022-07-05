@@ -1,5 +1,7 @@
 import 'package:demo_app/utils/mine_sweeper.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
+import 'dart:developer' as devtools show log;
 
 class MineSweeper extends StatefulWidget {
   const MineSweeper({Key? key}) : super(key: key);
@@ -10,30 +12,35 @@ class MineSweeper extends StatefulWidget {
 
 class _MineSweeperState extends State<MineSweeper> {
   static const _unit = 8.0;
+  static const bombCount = 6;
   static const rowCount = 9;
   static const gridCount = rowCount * rowCount;
 
-  int bombCount = 4;
   List squareStatus = [];
-  List<int> bombLocations = [4, 20, 40, 55];
-  bool bombed = false;
+  List<int> bombLocations = [];
+  bool gameEnded = false;
 
   @override
   void initState() {
     super.initState();
-
     for (int i = 0; i < gridCount; i++) {
       squareStatus.add([0, false]);
     }
+    bombLocations = Utils().randomNumbers(
+      max: gridCount,
+      listCount: bombCount,
+    );
 
-    void updater(int index) {
-      squareStatus[index][0]++;
-    }
-
-    Utils().scanBombs(bombLocations, rowCount, gridCount, updater);
+    Utils().scanBombs(
+      bombLocations,
+      rowCount,
+      gridCount,
+      (int i) => squareStatus[i][0]++,
+    );
   }
 
   void revealBox(int index) {
+    // if (!gameEnded) {
     void updater(int i) {
       setState(() {
         squareStatus[i][1] = true;
@@ -47,11 +54,35 @@ class _MineSweeperState extends State<MineSweeper> {
       updater,
       squareStatus,
     );
+    // }
   }
 
   void detonate() {
     setState(() {
-      bombed = true;
+      gameEnded = true;
+      for (int i in bombLocations) {
+        squareStatus[i][1] = true;
+      }
+    });
+  }
+
+  void reset() {
+    setState(() {
+      gameEnded = false;
+      for (int i = 0; i < gridCount; i++) {
+        squareStatus[i][1] = false;
+        squareStatus[i][0] = 0;
+      }
+      bombLocations = Utils().randomNumbers(
+        max: gridCount,
+        listCount: bombCount,
+      );
+      Utils().scanBombs(
+        bombLocations,
+        rowCount,
+        gridCount,
+        (int i) => squareStatus[i][0]++,
+      );
     });
   }
 
@@ -69,16 +100,25 @@ class _MineSweeperState extends State<MineSweeper> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(bombCount.toString(), style: TextStyle(fontSize: 40)),
-                    const Text("BOMBS", style: TextStyle(letterSpacing: _unit)),
+                    Text(
+                      bombCount.toString(),
+                      style: const TextStyle(fontSize: 40),
+                    ),
+                    const Text(
+                      "BOMBS",
+                      style: TextStyle(letterSpacing: _unit),
+                    ),
                   ],
                 ),
-                Card(
-                  color: Colors.grey[700],
-                  child: const Icon(
-                    Icons.refresh,
-                    color: Colors.white,
-                    size: 40,
+                GestureDetector(
+                  onTap: reset,
+                  child: Card(
+                    color: Colors.grey[700],
+                    child: const Icon(
+                      Icons.refresh,
+                      color: Colors.white,
+                      size: 40,
+                    ),
                   ),
                 ),
                 Column(
